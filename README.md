@@ -1,1 +1,1 @@
-1. Open the project (Test-GifGallery) in the format <Project>.
+1. Open the project (Test-GifGallery) in the format Project.
