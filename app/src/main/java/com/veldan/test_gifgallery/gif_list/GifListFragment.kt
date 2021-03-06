@@ -1,19 +1,26 @@
 package com.veldan.test_gifgallery.gif_list
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.bumptech.glide.Glide
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.Observer
 import com.veldan.test_gifgallery.R
 import com.veldan.test_gifgallery.databinding.FragmentGifListBinding
 import com.veldan.test_gifgallery.gif_list.adapter.GifListAdapter
+import com.veldan.test_gifgallery.gif_list.view_model.GifViewModel
 
 class GifListFragment : Fragment() {
+    private val TAG = this::class.simpleName
 
     // Binding
     private lateinit var binding: FragmentGifListBinding
+
+    // ViewModel
+    private val viewModel by viewModels<GifViewModel>()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -22,6 +29,10 @@ class GifListFragment : Fragment() {
     ): View {
 
         initBinding()
+
+        viewModel.response.observe(viewLifecycleOwner, Observer {
+            Log.i(TAG, "____\n$it")
+        })
 
         val adapter = GifListAdapter()
         binding.gifList.adapter = adapter
