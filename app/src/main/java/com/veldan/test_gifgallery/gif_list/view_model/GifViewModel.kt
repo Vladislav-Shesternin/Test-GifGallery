@@ -1,6 +1,5 @@
 package com.veldan.test_gifgallery.gif_list.view_model
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -24,7 +23,7 @@ class GifViewModel : ViewModel() {
             object : Callback<String> {
 
                 override fun onResponse(call: Call<String>, response: Response<String>) {
-                   _response.value = response.body()
+                     _response.value = response.body()
                 }
 
                 override fun onFailure(call: Call<String>, t: Throwable) {

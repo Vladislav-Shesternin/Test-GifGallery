@@ -7,11 +7,10 @@ import retrofit2.http.GET
 
 private const val GIPHY_URL = "https://api.giphy.com/v1/gifs/"
 
-private const val TRENDING_URL = "trending?" +
-        "api_key=febS2xeBZ3OAN251ILkTxkeSNgLWGvGG" +
-        "&limit=25" +
-        "&rating=g"
-
+private const val api_key = "febS2xeBZ3OAN251ILkTxkeSNgLWGvGG"
+private const val limit = 25
+private const val rating = "g"
+private const val TRENDING_URL = "trending?api_key=$api_key&limit=$limit&rating=$rating"
 
 private val retrofit = Retrofit.Builder()
     .addConverterFactory(ScalarsConverterFactory.create())
