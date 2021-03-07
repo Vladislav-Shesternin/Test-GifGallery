@@ -31,7 +31,7 @@ class GifListFragment : Fragment() {
         initBinding()
 
         viewModel.response.observe(viewLifecycleOwner, Observer {
-            Log.i(TAG, "onCreateView: $it")
+            //Log.i(TAG, "onCreateView: $it")
         })
 
         val adapter = GifListAdapter()
