@@ -25,11 +25,10 @@ class GifViewModel : ViewModel() {
         GiphyApi.retrofitService.getTrendingGifs().enqueue(
             object : Callback<Gifs> {
 
-                override fun onResponse(
-                    call: Call<Gifs>,
-                    response: Response<Gifs>
-                ) {
-                    Log.i("GifListFragment", "onResponse: ${response.body()}")
+                override fun onResponse(call: Call<Gifs>, response: Response<Gifs>) {
+                    Log.i("GifListFragment", "onResponse: " +
+                            response.body()!!.data[0].id
+                    )
                 }
 
                 override fun onFailure(call: Call<Gifs>, t: Throwable) {

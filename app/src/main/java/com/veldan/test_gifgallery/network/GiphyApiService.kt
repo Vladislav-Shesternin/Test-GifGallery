@@ -10,15 +10,9 @@ import retrofit2.http.GET
 private const val GIPHY_URL = "https://api.giphy.com/v1/gifs/"
 
 private const val api_key = "febS2xeBZ3OAN251ILkTxkeSNgLWGvGG"
-private const val limit = 25
+private const val limit = 3
 private const val rating = "g"
 private const val TRENDING_URL = "trending?api_key=$api_key&limit=$limit&rating=$rating"
-
-
-//private const val BASE_URL =
-//    "https://android-kotlin-fun-mars-server.appspot.com"
-//  @GET("realestate")
-
 
 private val moshi = Moshi.Builder()
     .add(KotlinJsonAdapterFactory())
