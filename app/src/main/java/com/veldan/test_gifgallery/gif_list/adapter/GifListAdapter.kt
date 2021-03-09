@@ -1,33 +1,32 @@
 package com.veldan.test_gifgallery.gif_list.adapter
 
+import android.util.Log
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
-import androidx.annotation.NonNull
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
-import com.veldan.test_gifgallery.R
 import com.veldan.test_gifgallery.databinding.ItemGifListBinding
+import com.veldan.test_gifgallery.network.Images
 
 /**
  *  Using [DiffUtils] for more efficient list work.
  *
  * */
-class GifListDiffCallback : DiffUtil.ItemCallback<String>() {
+class GifListDiffCallback : DiffUtil.ItemCallback<Images>() {
 
-    override fun areItemsTheSame(oldItem: String, newItem: String): Boolean {
+    override fun areItemsTheSame(oldItem: Images, newItem: Images): Boolean {
         return oldItem == newItem
     }
 
-    override fun areContentsTheSame(oldItem: String, newItem: String): Boolean {
-        return oldItem.equals(newItem)
+    override fun areContentsTheSame(oldItem: Images, newItem: Images): Boolean {
+        return oldItem.fixedHeight == newItem.fixedHeight
+                && oldItem.fixedWidth == newItem.fixedWidth
     }
 }
 
-class GifListAdapter :
-    ListAdapter<String, GifListAdapter.GifItemViewHolder>(GifListDiffCallback()) {
+class GifListAdapter(val clickListener: GifItemListener):
+    ListAdapter<Images, GifListAdapter.GifItemViewHolder>(GifListDiffCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): GifItemViewHolder {
         return GifItemViewHolder.from(parent)
@@ -35,7 +34,7 @@ class GifListAdapter :
 
     override fun onBindViewHolder(holder: GifItemViewHolder, position: Int) {
         val item = getItem(position)
-        holder.bind(item)
+        holder.bind(item, clickListener)
     }
 
     /**
@@ -60,12 +59,19 @@ class GifListAdapter :
             }
         }
 
-        fun bind(gifUrl: String) {
+        fun bind(gifImage: Images, clickListener: GifItemListener) {
             binding.also {
-                it.gifUrl = gifUrl
+                it.gifImage = gifImage
+                it.clickListener = clickListener
                 it.executePendingBindings()
             }
 
         }
+    }
+}
+
+class GifItemListener(val clickListener: (url: String) -> Unit) {
+    fun onClick(gifImage: Images) {
+        clickListener(gifImage.fixedHeight.url)
     }
 }

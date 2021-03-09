@@ -13,8 +13,10 @@ import androidx.recyclerview.widget.RecyclerView
 import com.airbnb.lottie.LottieAnimationView
 import com.veldan.test_gifgallery.R
 import com.veldan.test_gifgallery.databinding.FragmentGifListBinding
+import com.veldan.test_gifgallery.gif_list.adapter.GifItemListener
 import com.veldan.test_gifgallery.gif_list.adapter.GifListAdapter
 import com.veldan.test_gifgallery.gif_list.view_model.GifViewModel
+import com.veldan.test_gifgallery.network.Images
 
 class GifListFragment : Fragment() {
     private val TAG = this::class.simpleName
@@ -30,7 +32,9 @@ class GifListFragment : Fragment() {
     private lateinit var lottieNoInternet: LottieAnimationView
 
     // Components
-    private val adapter = GifListAdapter()
+    private val adapter = GifListAdapter(GifItemListener {
+        Log.i("GifListFragment", "onClick: \n$it")
+    })
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -72,11 +76,11 @@ class GifListFragment : Fragment() {
                         cancelAnimation()
                         visibility = View.INVISIBLE
                     }
-                    val gifUrlList = mutableListOf<String>()
+                    val gifImages = mutableListOf<Images>()
                     listGifProperty.forEach { gif ->
-                        gifUrlList.add(gif.images.fixedWidth.url)
+                        gifImages.add(gif.images)
                     }
-                    adapter.submitList(gifUrlList)
+                    adapter.submitList(gifImages)
                 } else {
                     lottieNoInternet.playAnimation()
                 }

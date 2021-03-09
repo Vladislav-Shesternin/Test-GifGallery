@@ -5,16 +5,21 @@
     <data>
 
         <variable
-            name="gifUrl"
-            type="String" />
+            name="gifImage"
+            type="com.veldan.test_gifgallery.network.Images" />
+
+        <variable
+            name="clickListener"
+            type="com.veldan.test_gifgallery.gif_list.adapter.GifItemListener" />
     </data>
 
     <ImageView xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
-        setGif="@{gifUrl}"
+        setGif="@{gifImage.fixedWidth.url}"
         android:layout_width="match_parent"
         android:layout_height="200dp"
         android:layout_margin="10dp"
+        android:onClick="@{() -> clickListener.onClick(gifImage)}"
         android:scaleType="centerCrop"
         tools:src="@mipmap/ic_launcher" />
 </layout>
