@@ -9,6 +9,8 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.RecyclerView
+import com.airbnb.lottie.LottieAnimationView
 import com.veldan.test_gifgallery.R
 import com.veldan.test_gifgallery.databinding.FragmentGifListBinding
 import com.veldan.test_gifgallery.gif_list.adapter.GifListAdapter
@@ -23,6 +25,13 @@ class GifListFragment : Fragment() {
     // ViewModel
     private val viewModel by viewModels<GifViewModel>()
 
+    // Components UI
+    private lateinit var gifList: RecyclerView
+    private lateinit var lottieNoInternet: LottieAnimationView
+
+    // Components
+    private val adapter = GifListAdapter()
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -30,27 +39,49 @@ class GifListFragment : Fragment() {
     ): View {
 
         initBinding()
-        initGifListAdapter()
-
         return binding.root
     }
 
     // {init}: Binding
     private fun initBinding() {
         binding = FragmentGifListBinding.inflate(layoutInflater)
+        initComponentsUI()
+    }
+
+    // {init}: Components UI
+    private fun initComponentsUI() {
+        binding.also {
+            gifList = it.gifList
+            lottieNoInternet = it.lottieNoInternet
+        }
+        initGifListAdapter()
     }
 
     // {init}: GifListAdapter
     private fun initGifListAdapter() {
-        val adapter = GifListAdapter()
-        binding.gifList.adapter = adapter
+        gifList.adapter = adapter
+        updateGifList()
+    }
 
-        viewModel.response.observe(viewLifecycleOwner, Observer { listGifProperty ->
-            val gifUrlList = mutableListOf<String>()
-            listGifProperty.forEach {
-                gifUrlList.add(it.images.fixedWidth.url)
-            }
-            adapter.gifUrlList = gifUrlList
-        })
+    // {fun}: Update gif list
+    private fun updateGifList() {
+        viewModel.response.observe(
+            viewLifecycleOwner, Observer { listGifProperty ->
+                if (listGifProperty != null) {
+                    lottieNoInternet.apply {
+                        cancelAnimation()
+                        visibility = View.INVISIBLE
+                    }
+
+
+                    val gifUrlList = mutableListOf<String>()
+                    listGifProperty.forEach { gif ->
+                        gifUrlList.add(gif.images.fixedWidth.url)
+                    }
+                    adapter.gifUrlList = gifUrlList
+                } else {
+                    lottieNoInternet.playAnimation()
+                }
+            })
     }
 }

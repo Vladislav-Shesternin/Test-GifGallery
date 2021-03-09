@@ -41,6 +41,7 @@ android {
             res.srcDirs = [
                     'src/main/res',
                     'src/main/res/global',
+                    'src/main/res/global/raws',
                     'src/main/res/global/navigations',
                     'src/main/res/global/valueses',
                     'src/main/res/global/mipmaps',
@@ -81,4 +82,7 @@ dependencies {
     // Moshi
     def version_moshi = "1.11.0"
     implementation "com.squareup.moshi:moshi-kotlin:$version_moshi"
+    // Lottie Animation
+    def version_lottie = "3.6.1"
+    implementation "com.airbnb.android:lottie:$version_lottie"
 }

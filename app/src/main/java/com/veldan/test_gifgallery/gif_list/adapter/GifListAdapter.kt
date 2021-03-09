@@ -31,8 +31,10 @@ class GifListAdapter : RecyclerView.Adapter<GifListAdapter.GifItemViewHolder>() 
     class GifItemViewHolder(private val imageView: ImageView) : RecyclerView.ViewHolder(imageView) {
         fun bind(gif_url: String) {
             Glide.with(imageView.rootView)
-                .asGif()
                 .load(gif_url)
+                .thumbnail(
+                    Glide.with(imageView.rootView)
+                        .load(R.drawable.loading))
                 .into(imageView)
         }
     }

@@ -14,8 +14,8 @@ import retrofit2.Response
 class GifViewModel : ViewModel() {
     private val TAG = this::class.simpleName
 
-    private val _response = MutableLiveData<List<GifProperty>>()
-    val response: LiveData<List<GifProperty>>
+    private val _response = MutableLiveData<List<GifProperty>?>()
+    val response: LiveData<List<GifProperty>?>
         get() = _response
 
     init {
@@ -28,6 +28,7 @@ class GifViewModel : ViewModel() {
                 val gifs = GiphyApi.retrofitService.getTrendingGifs().data
                 _response.value = gifs
             } catch (e: Exception) {
+                _response.value = null
                 Log.i(TAG, "Failure: ${e.message}")
             }
         }
