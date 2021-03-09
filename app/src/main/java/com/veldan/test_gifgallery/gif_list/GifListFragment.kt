@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
+import androidx.navigation.fragment.findNavController
 import com.veldan.test_gifgallery.R
 import com.veldan.test_gifgallery.databinding.FragmentGifListBinding
 import com.veldan.test_gifgallery.gif_list.adapter.GifListAdapter
@@ -29,17 +30,7 @@ class GifListFragment : Fragment() {
     ): View {
 
         initBinding()
-
-
-        val adapter = GifListAdapter()
-        binding.gifList.adapter = adapter
-        viewModel.response.observe(viewLifecycleOwner, Observer { listGifProperty ->
-            val gifUrlList = mutableListOf<String>()
-            listGifProperty.forEach {
-                gifUrlList.add(it.images.fixedWidth.url)
-            }
-            adapter.gifUrlList = gifUrlList
-        })
+        initGifListAdapter()
 
         return binding.root
     }
@@ -47,5 +38,19 @@ class GifListFragment : Fragment() {
     // {init}: Binding
     private fun initBinding() {
         binding = FragmentGifListBinding.inflate(layoutInflater)
+    }
+
+    // {init}: GifListAdapter
+    private fun initGifListAdapter() {
+        val adapter = GifListAdapter()
+        binding.gifList.adapter = adapter
+
+        viewModel.response.observe(viewLifecycleOwner, Observer { listGifProperty ->
+            val gifUrlList = mutableListOf<String>()
+            listGifProperty.forEach {
+                gifUrlList.add(it.images.fixedWidth.url)
+            }
+            adapter.gifUrlList = gifUrlList
+        })
     }
 }

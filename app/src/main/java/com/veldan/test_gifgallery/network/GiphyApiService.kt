@@ -25,7 +25,7 @@ private val retrofit = Retrofit.Builder()
 
 interface GiphyApiService {
     @GET(TRENDING_URL)
-    fun getTrendingGifs(): Call<Gifs>
+    suspend fun getTrendingGifs(): Gifs
 }
 
 object GiphyApi {
