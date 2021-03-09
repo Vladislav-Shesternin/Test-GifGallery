@@ -72,13 +72,11 @@ class GifListFragment : Fragment() {
                         cancelAnimation()
                         visibility = View.INVISIBLE
                     }
-
-
                     val gifUrlList = mutableListOf<String>()
                     listGifProperty.forEach { gif ->
                         gifUrlList.add(gif.images.fixedWidth.url)
                     }
-                    adapter.gifUrlList = gifUrlList
+                    adapter.submitList(gifUrlList)
                 } else {
                     lottieNoInternet.playAnimation()
                 }

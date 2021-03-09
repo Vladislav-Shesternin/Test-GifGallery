@@ -1,41 +1,71 @@
 package com.veldan.test_gifgallery.gif_list.adapter
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
+import androidx.annotation.NonNull
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.veldan.test_gifgallery.R
+import com.veldan.test_gifgallery.databinding.ItemGifListBinding
 
-class GifListAdapter : RecyclerView.Adapter<GifListAdapter.GifItemViewHolder>() {
+/**
+ *  Using [DiffUtils] for more efficient list work.
+ *
+ * */
+class GifListDiffCallback : DiffUtil.ItemCallback<String>() {
 
-    var gifUrlList = listOf<String>()
-        set(value) {
-            field = value
-            notifyDataSetChanged()
-        }
+    override fun areItemsTheSame(oldItem: String, newItem: String): Boolean {
+        return oldItem == newItem
+    }
+
+    override fun areContentsTheSame(oldItem: String, newItem: String): Boolean {
+        return oldItem.equals(newItem)
+    }
+}
+
+class GifListAdapter :
+    ListAdapter<String, GifListAdapter.GifItemViewHolder>(GifListDiffCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): GifItemViewHolder {
-        val layoutInflater = LayoutInflater.from(parent.context)
-        val imageView = layoutInflater.inflate(R.layout.item_gif_list, parent, false) as ImageView
-        return GifItemViewHolder(imageView)
+        return GifItemViewHolder.from(parent)
     }
 
     override fun onBindViewHolder(holder: GifItemViewHolder, position: Int) {
-        val item = gifUrlList[position]
+        val item = getItem(position)
         holder.bind(item)
     }
 
-    override fun getItemCount() = gifUrlList.size
+    /**
+     * Gif Item View Holder
+     *
+     * @constructor (private) - because the value [imageView] is obtained as a result of calling the method [from()]
+     * in the [onCreateViewHolder] class, you don't need to pass the constructor parameter anywhere else.
+     *
+     * */
+    class GifItemViewHolder
+    private constructor(
+        private val binding: ItemGifListBinding
+    ) : RecyclerView.ViewHolder(binding.root) {
 
-    class GifItemViewHolder(private val imageView: ImageView) : RecyclerView.ViewHolder(imageView) {
-        fun bind(gif_url: String) {
-            Glide.with(imageView.rootView)
-                .load(gif_url)
-                .thumbnail(
-                    Glide.with(imageView.rootView)
-                        .load(R.drawable.loading))
-                .into(imageView)
+        private val imageView = binding.root
+
+        companion object {
+            fun from(parent: ViewGroup): GifItemViewHolder {
+                val layoutInflater = LayoutInflater.from(parent.context)
+                val binding = ItemGifListBinding.inflate(layoutInflater, parent, false)
+                return GifItemViewHolder(binding)
+            }
+        }
+
+        fun bind(gifUrl: String) {
+            binding.also {
+                it.gifUrl = gifUrl
+                it.executePendingBindings()
+            }
+
         }
     }
 }
