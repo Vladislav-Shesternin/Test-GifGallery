@@ -30,13 +30,16 @@ class GifListFragment : Fragment() {
 
         initBinding()
 
-        viewModel.response.observe(viewLifecycleOwner, Observer {
-            //Log.i(TAG, "onCreateView: $it")
-        })
 
         val adapter = GifListAdapter()
         binding.gifList.adapter = adapter
-        adapter.gifList = List(100) { R.drawable.test }
+        viewModel.response.observe(viewLifecycleOwner, Observer { listGifProperty ->
+            val gifUrlList = mutableListOf("")
+            listGifProperty.forEach {
+                gifUrlList.add(it.images.fixedWidth.url)
+            }
+            adapter.gifUrlList = gifUrlList
+        })
 
         return binding.root
     }

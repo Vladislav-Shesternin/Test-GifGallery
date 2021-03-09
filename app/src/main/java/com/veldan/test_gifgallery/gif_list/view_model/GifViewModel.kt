@@ -4,17 +4,16 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.veldan.test_gifgallery.network.GifProperty
-import com.veldan.test_gifgallery.network.Gifs
-import com.veldan.test_gifgallery.network.GiphyApi
+import com.veldan.test_gifgallery.network.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
 class GifViewModel : ViewModel() {
+    private val TAG = this::class.simpleName
 
-    private val _response = MutableLiveData<String>()
-    val response: LiveData<String>
+    private val _response = MutableLiveData<List<GifProperty>>()
+    val response: LiveData<List<GifProperty>>
         get() = _response
 
     init {
@@ -26,15 +25,14 @@ class GifViewModel : ViewModel() {
             object : Callback<Gifs> {
 
                 override fun onResponse(call: Call<Gifs>, response: Response<Gifs>) {
-                    Log.i("GifListFragment", "onResponse: " +
-                            response.body()!!.data[0].id
-                    )
+                    response.body()?.let {
+                        _response.value = it.data
+                    }
                 }
 
                 override fun onFailure(call: Call<Gifs>, t: Throwable) {
-                    _response.value = "Failure: " + t.message
+                    Log.i(TAG, "onFailure: ${t.message}")
                 }
-
             }
         )
     }

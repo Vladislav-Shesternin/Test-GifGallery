@@ -9,7 +9,7 @@ import com.veldan.test_gifgallery.R
 
 class GifListAdapter : RecyclerView.Adapter<GifListAdapter.GifItemViewHolder>() {
 
-    var gifList = listOf<Int>()
+    var gifUrlList = listOf<String>()
         set(value) {
             field = value
             notifyDataSetChanged()
@@ -22,17 +22,17 @@ class GifListAdapter : RecyclerView.Adapter<GifListAdapter.GifItemViewHolder>() 
     }
 
     override fun onBindViewHolder(holder: GifItemViewHolder, position: Int) {
-        val item = gifList[position]
+        val item = gifUrlList[position]
         holder.bind(item)
     }
 
-    override fun getItemCount() = gifList.size
+    override fun getItemCount() = gifUrlList.size
 
     class GifItemViewHolder(private val imageView: ImageView) : RecyclerView.ViewHolder(imageView) {
-        fun bind(gif: Int) {
+        fun bind(gif_url: String) {
             Glide.with(imageView.rootView)
                 .asGif()
-                .load(gif)
+                .load(gif_url)
                 .into(imageView)
         }
     }
