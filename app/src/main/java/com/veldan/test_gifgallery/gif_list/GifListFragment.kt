@@ -34,7 +34,7 @@ class GifListFragment : Fragment() {
         val adapter = GifListAdapter()
         binding.gifList.adapter = adapter
         viewModel.response.observe(viewLifecycleOwner, Observer { listGifProperty ->
-            val gifUrlList = mutableListOf("")
+            val gifUrlList = mutableListOf<String>()
             listGifProperty.forEach {
                 gifUrlList.add(it.images.fixedWidth.url)
             }
