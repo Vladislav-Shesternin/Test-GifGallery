@@ -1,12 +1,12 @@
-package com.veldan.test_gifgallery.gif_list.adapter
+package com.veldan.test_gifgallery.fragments.gif_list.adapter
 
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.veldan.test_gifgallery.databinding.ItemGifListBinding
+import com.veldan.test_gifgallery.fragments.gif_list.adapter.GifListAdapter.GifItemViewHolder
 import com.veldan.test_gifgallery.network.Images
 
 /**
@@ -16,7 +16,7 @@ import com.veldan.test_gifgallery.network.Images
 class GifListDiffCallback : DiffUtil.ItemCallback<Images>() {
 
     override fun areItemsTheSame(oldItem: Images, newItem: Images): Boolean {
-        return oldItem == newItem
+        return oldItem === newItem
     }
 
     override fun areContentsTheSame(oldItem: Images, newItem: Images): Boolean {
@@ -25,7 +25,12 @@ class GifListDiffCallback : DiffUtil.ItemCallback<Images>() {
     }
 }
 
-class GifListAdapter(val clickListener: GifItemListener):
+/**
+ * [GifListAdapter : ListAdapter <Images, ViewHolder> (GifListDiffCallback)]
+ * @constructor (private val clickListener: GifItemListener) - a click listener class to listen to [GifItemViewHolder].
+ *
+ * */
+class GifListAdapter(private val clickListener: GifItemListener) :
     ListAdapter<Images, GifListAdapter.GifItemViewHolder>(GifListDiffCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): GifItemViewHolder {
@@ -69,8 +74,13 @@ class GifListAdapter(val clickListener: GifItemListener):
         }
     }
 }
-
-class GifItemListener(val clickListener: (url: String) -> Unit) {
+/**
+ * [GifItemListener] - a click listener class to listen to [GifItemViewHolder].
+ * @constructor takes a lambda with [(String) -> Unit].
+ * @sample - contains a function [onClick] that takes a parameter (Images) and performs the function passed to the constructor.
+ *
+ * */
+class GifItemListener(private val clickListener: (url: String) -> Unit) {
     fun onClick(gifImage: Images) {
         clickListener(gifImage.fixedHeight.url)
     }

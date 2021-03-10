@@ -5,9 +5,25 @@
     android:id="@+id/navigation"
     app:startDestination="@id/gifListFragment">
 
+    <!-- {DESTINATION}: gifListFragment -->
     <fragment
         android:id="@+id/gifListFragment"
-        android:name="com.veldan.test_gifgallery.gif_list.GifListFragment"
-        android:label="fragment_gif_list"
-        tools:layout="@layout/fragment_gif_list" />
+        android:name="com.veldan.test_gifgallery.fragments.gif_list.GifListFragment"
+        android:label="GifListFragment"
+        tools:layout="@layout/fragment_gif_list">
+        <action
+            android:id="@+id/action_gifListFragment_to_gifDetailFragment"
+            app:destination="@id/gifDetailFragment" />
+    </fragment>
+
+    <!-- {DESTINATION}: gifDetailFragment -->
+    <fragment
+        android:id="@+id/gifDetailFragment"
+        android:name="com.veldan.test_gifgallery.fragments.gif_detail.GifDetailFragment"
+        android:label="GifDetailFragment"
+        tools:layout="@layout/fragment_gif_detail">
+        <argument
+            android:name="gifUrl"
+            app:argType="string" />
+    </fragment>
 </navigation>

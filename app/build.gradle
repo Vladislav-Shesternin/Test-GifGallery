@@ -49,6 +49,7 @@ android {
                     'src/main/res/global/drawables',
                     'src/main/res/screens',
                     'src/main/res/screens/gif_list',
+                    'src/main/res/screens/gif_detail',
             ]
         }
     }

@@ -1,4 +1,4 @@
-package com.veldan.test_gifgallery.gif_list
+package com.veldan.test_gifgallery.fragments.gif_list
 
 import android.os.Bundle
 import android.util.Log
@@ -11,11 +11,10 @@ import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.airbnb.lottie.LottieAnimationView
-import com.veldan.test_gifgallery.R
 import com.veldan.test_gifgallery.databinding.FragmentGifListBinding
-import com.veldan.test_gifgallery.gif_list.adapter.GifItemListener
-import com.veldan.test_gifgallery.gif_list.adapter.GifListAdapter
-import com.veldan.test_gifgallery.gif_list.view_model.GifViewModel
+import com.veldan.test_gifgallery.fragments.gif_list.adapter.GifItemListener
+import com.veldan.test_gifgallery.fragments.gif_list.adapter.GifListAdapter
+import com.veldan.test_gifgallery.fragments.gif_list.view_model.GifViewModel
 import com.veldan.test_gifgallery.network.Images
 
 class GifListFragment : Fragment() {
@@ -32,9 +31,11 @@ class GifListFragment : Fragment() {
     private lateinit var lottieNoInternet: LottieAnimationView
 
     // Components
-    private val adapter = GifListAdapter(GifItemListener {
-        Log.i("GifListFragment", "onClick: \n$it")
-    })
+    private val adapter = GifListAdapter(
+        GifItemListener {
+            viewModel.onGifItemClicked(it)
+        }
+    )
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -65,6 +66,7 @@ class GifListFragment : Fragment() {
     private fun initGifListAdapter() {
         gifList.adapter = adapter
         updateGifList()
+        observeGifItemClick()
     }
 
     // {fun}: Update gif list
@@ -85,5 +87,21 @@ class GifListFragment : Fragment() {
                     lottieNoInternet.playAnimation()
                 }
             })
+    }
+
+    // {fun}: Observe GifItem onClick
+    private fun observeGifItemClick() {
+        viewModel.navigateToGifDetail.observe(viewLifecycleOwner, Observer {
+            it?.let {
+                from_GifListFragment_to_GifDetailFragment(it)
+                viewModel.onGifDetailNavigated()
+            }
+        })
+    }
+
+    // {nav}: [GifListFragment] ---> [GifDetailFragment]
+    private fun from_GifListFragment_to_GifDetailFragment(gifUrl: String) {
+        val action = GifListFragmentDirections.actionGifListFragmentToGifDetailFragment(gifUrl)
+        findNavController().navigate(action)
     }
 }
