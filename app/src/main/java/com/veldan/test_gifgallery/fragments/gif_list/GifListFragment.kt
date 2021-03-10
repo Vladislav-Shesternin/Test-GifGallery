@@ -60,7 +60,7 @@ class GifListFragment : Fragment() {
         val application = requireNotNull(this.activity).application
         val gifDao = GifDatabase.getDatabase(application).gifDao
 
-        val gifViewModelFactory = GifViewModelFactory(gifDao, application)
+        val gifViewModelFactory = GifViewModelFactory(gifDao)
         gifViewModel = ViewModelProvider(this, gifViewModelFactory)
             .get(GifViewModel::class.java)
     }

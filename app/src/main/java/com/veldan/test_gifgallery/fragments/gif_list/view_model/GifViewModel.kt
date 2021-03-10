@@ -1,10 +1,11 @@
 package com.veldan.test_gifgallery.fragments.gif_list.view_model
 
-import android.app.Application
 import android.util.Log
-import androidx.lifecycle.*
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.veldan.test_gifgallery.databse.GifDao
-import com.veldan.test_gifgallery.databse.GifDatabase
 import com.veldan.test_gifgallery.databse.GifModel
 import com.veldan.test_gifgallery.network.GifProperty
 import com.veldan.test_gifgallery.network.GiphyApi
@@ -12,8 +13,7 @@ import kotlinx.coroutines.launch
 
 class GifViewModel(
     private val gifDao: GifDao,
-    application: Application
-) : AndroidViewModel(application) {
+) : ViewModel() {
 
     private val TAG = this::class.simpleName
 
