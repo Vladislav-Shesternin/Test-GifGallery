@@ -1,29 +1,48 @@
 package com.veldan.test_gifgallery.fragments.gif_list.view_model
 
+import android.app.Application
 import android.util.Log
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.*
+import com.veldan.test_gifgallery.databse.GifDao
+import com.veldan.test_gifgallery.databse.GifDatabase
+import com.veldan.test_gifgallery.databse.GifModel
 import com.veldan.test_gifgallery.network.GifProperty
 import com.veldan.test_gifgallery.network.GiphyApi
 import kotlinx.coroutines.launch
 
-class GifViewModel : ViewModel() {
+class GifViewModel(
+    private val gifDao: GifDao,
+    application: Application
+) : AndroidViewModel(application) {
+
     private val TAG = this::class.simpleName
 
+    // Response from Network
     private val _response = MutableLiveData<List<GifProperty>?>()
     val response: LiveData<List<GifProperty>?>
         get() = _response
 
+    // Navigation to GifDetail
     private val _navigateToGifDetail = MutableLiveData<String?>()
     val navigateToGifDetail: LiveData<String?>
         get() = _navigateToGifDetail
 
+    // {fun}: onGifItemClicked
+    fun onGifItemClicked(gifUrl: String) {
+        _navigateToGifDetail.value = gifUrl
+    }
+
+    // {fun}: onGifDetailNavigated
+    fun onGifDetailNavigated() {
+        _navigateToGifDetail.value = null
+    }
+
+    // ----------| Network { GiphyApiService } |----------
     init {
         getGifs()
     }
 
+    // {fun}: getGifs
     private fun getGifs() {
         viewModelScope.launch {
             try {
@@ -36,11 +55,17 @@ class GifViewModel : ViewModel() {
         }
     }
 
-    fun onGifItemClicked(gifUrl: String) {
-        _navigateToGifDetail.value = gifUrl
+    // ----------| Database { GifDatabase } |----------
+
+    // {fun}: insertGif
+    fun insertGif(gif: GifModel) {
+        viewModelScope.launch {
+            _insertGif(gif)
+        }
     }
 
-    fun onGifDetailNavigated() {
-        _navigateToGifDetail.value = null
+    //{suspend fun}: insertGif
+    private suspend fun _insertGif(gif: GifModel) {
+        gifDao.insertGif(gif)
     }
 }
