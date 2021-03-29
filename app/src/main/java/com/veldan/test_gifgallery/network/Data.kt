@@ -4,7 +4,7 @@ import com.squareup.moshi.Json
 
 
 /**
- *Example JSON is in: [Scratches and Console] -> [Scratches] -> [Gif-Tranding-Result]
+ * Example JSON is in: [Scratches and Console] -> [Scratches] -> [Gif-Tranding-Result]
  *
  * */
 data class Gifs(

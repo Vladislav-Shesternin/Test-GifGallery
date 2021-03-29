@@ -1,26 +1,24 @@
 package com.veldan.test_gifgallery.fragments.gif_list
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.airbnb.lottie.LottieAnimationView
 import com.veldan.test_gifgallery.databinding.FragmentGifListBinding
-import com.veldan.test_gifgallery.databse.GifDatabase
 import com.veldan.test_gifgallery.databse.GifModel
 import com.veldan.test_gifgallery.fragments.gif_list.adapter.GifItemListener
 import com.veldan.test_gifgallery.fragments.gif_list.adapter.GifListAdapter
 import com.veldan.test_gifgallery.fragments.gif_list.view_model.GifViewModel
-import com.veldan.test_gifgallery.fragments.gif_list.view_model.GifViewModelFactory
 import com.veldan.test_gifgallery.network.Images
+import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class GifListFragment : Fragment() {
     private val TAG = this::class.simpleName
 
@@ -28,15 +26,15 @@ class GifListFragment : Fragment() {
     private lateinit var binding: FragmentGifListBinding
 
     // ViewModel
-    private lateinit var gifViewModel: GifViewModel
-
-    // Components UI
-    private lateinit var gifList: RecyclerView
-    private lateinit var lottieNoInternet: LottieAnimationView
+    @Inject
+    lateinit var gifViewModel: GifViewModel
 
     // Components
     private lateinit var adapter: GifListAdapter
 
+    // Components UI
+    private lateinit var gifList: RecyclerView
+    private lateinit var lottieNoInternet: LottieAnimationView
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -51,19 +49,19 @@ class GifListFragment : Fragment() {
     // {init}: Binding
     private fun initBinding() {
         binding = FragmentGifListBinding.inflate(layoutInflater)
-        initViewModel()
+        //initViewModel()
         initComponentsUI()
     }
 
     // {init}: ViewModel
-    private fun initViewModel() {
-        val application = requireNotNull(this.activity).application
-        val gifDao = GifDatabase.getDatabase(application).gifDao
-
-        val gifViewModelFactory = GifViewModelFactory(gifDao)
-        gifViewModel = ViewModelProvider(this, gifViewModelFactory)
-            .get(GifViewModel::class.java)
-    }
+//    private fun initViewModel() {
+//        val application = requireNotNull(this.activity).application
+//        val gifDao = GifDatabase.getDatabase(application).gifDao
+//
+//        val gifViewModelFactory = GifViewModelFactory(gifDao)
+//        gifViewModel = ViewModelProvider(this, gifViewModelFactory)
+//            .get(GifViewModel::class.java)
+//    }
 
     // {init}: Components UI
     private fun initComponentsUI() {
@@ -86,35 +84,34 @@ class GifListFragment : Fragment() {
 
     // {fun}: Update gif list
     private fun updateGifList() {
-        gifViewModel.response.observe(
-            viewLifecycleOwner, Observer { listGifProperty ->
-                if (listGifProperty != null) {
-                    lottieNoInternet.apply {
-                        cancelAnimation()
-                        visibility = View.INVISIBLE
-                    }
-                    val gifImages = mutableListOf<Images>()
-                    listGifProperty.forEach { gif ->
-                        gifImages.add(gif.images)
-
-                        // Insert GifModel in GifDatabase
-                        gif.apply {
-                            gifViewModel.insertGif(
-                                GifModel(
-                                    id,
-                                    images.fixedWidth.url,
-                                    images.fixedHeight.url
-                                )
-                            )
-                        }
-                    }
-                    // Filling RecyclerView
-                    adapter.submitList(gifImages)
-                } else {
-                    // No network connection
-                    lottieNoInternet.playAnimation()
+        gifViewModel.response.observe(viewLifecycleOwner, Observer { listGifProperty ->
+            if (listGifProperty != null) {
+                lottieNoInternet.apply {
+                    cancelAnimation()
+                    visibility = View.INVISIBLE
                 }
-            })
+                val gifImages = mutableListOf<Images>()
+                listGifProperty.forEach { gif ->
+                    gifImages.add(gif.images)
+
+                    // Insert GifModel in GifDatabase
+                    gif.apply {
+                        gifViewModel.insertGif(
+                            GifModel(
+                                id,
+                                images.fixedWidth.url,
+                                images.fixedHeight.url
+                            )
+                        )
+                    }
+                }
+                // Filling RecyclerView
+                adapter.submitList(gifImages)
+            } else {
+                // No network connection
+                lottieNoInternet.playAnimation()
+            }
+        })
     }
 
     // {fun}: Observe GifItem onClick

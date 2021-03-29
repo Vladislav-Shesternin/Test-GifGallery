@@ -9,6 +9,7 @@ buildscript {
         version_moshi = "1.11.0"
         version_lottie = "3.6.1"
         version_room = "2.2.6"
+        version_hilt = "2.33-beta"
     }
     repositories {
         google()
@@ -17,6 +18,7 @@ buildscript {
     dependencies {
         classpath "com.android.tools.build:gradle:4.1.2"
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$version_kotlin"
+        classpath "com.google.dagger:hilt-android-gradle-plugin:$version_hilt"
         classpath "androidx.navigation:navigation-safe-args-gradle-plugin:$version_navigation"
     }
 }

@@ -7,8 +7,9 @@ import androidx.lifecycle.viewModelScope
 import com.veldan.test_gifgallery.databse.GifDao
 import com.veldan.test_gifgallery.databse.GifModel
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class GifDetailViewModel(
+class GifDetailViewModel @Inject constructor(
     private val gifDao: GifDao,
 ) : ViewModel() {
 

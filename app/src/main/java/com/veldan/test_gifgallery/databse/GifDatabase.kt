@@ -1,8 +1,6 @@
 package com.veldan.test_gifgallery.databse
 
-import android.content.Context
 import androidx.room.Database
-import androidx.room.Room
 import androidx.room.RoomDatabase
 
 @Database(
@@ -14,24 +12,4 @@ abstract class GifDatabase : RoomDatabase() {
 
     abstract val gifDao: GifDao
 
-    companion object {
-
-        @Volatile
-        private var INSTANCE: GifDatabase? = null
-
-        fun getDatabase(context: Context): GifDatabase {
-            return INSTANCE ?: synchronized(this) {
-                val instance = Room
-                    .databaseBuilder(
-                        context.applicationContext,
-                        GifDatabase::class.java,
-                        "gif_database"
-                    )
-                    .fallbackToDestructiveMigration()
-                    .build()
-                INSTANCE = instance
-                instance
-            }
-        }
-    }
 }

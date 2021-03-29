@@ -8,11 +8,14 @@ import androidx.lifecycle.viewModelScope
 import com.veldan.test_gifgallery.databse.GifDao
 import com.veldan.test_gifgallery.databse.GifModel
 import com.veldan.test_gifgallery.network.GifProperty
-import com.veldan.test_gifgallery.network.GiphyApi
+import com.veldan.test_gifgallery.network.GiphyApiService
 import kotlinx.coroutines.launch
+import retrofit2.Retrofit
+import javax.inject.Inject
 
-class GifViewModel(
+class GifViewModel @Inject constructor(
     private val gifDao: GifDao,
+    private val retrofit: Retrofit
 ) : ViewModel() {
 
     private val TAG = this::class.simpleName
@@ -37,7 +40,7 @@ class GifViewModel(
         _navigateToGifDetail.value = null
     }
 
-    // ----------| Network { GiphyApiService } |----------
+    // ------------------------------------------------------------| Network { GiphyApiService } |
     init {
         getGifs()
     }
@@ -46,7 +49,7 @@ class GifViewModel(
     private fun getGifs() {
         viewModelScope.launch {
             try {
-                val gifs = GiphyApi.retrofitService.getTrendingGifs().data
+                val gifs = retrofit.create(GiphyApiService::class.java).getTrendingGifs().data
                 _response.value = gifs
             } catch (e: Exception) {
                 _response.value = null
@@ -55,7 +58,7 @@ class GifViewModel(
         }
     }
 
-    // ----------| Database { GifDatabase } |----------
+    // ------------------------------------------------------------| Database { GifDatabase } |
 
     // {fun}: insertGif
     fun insertGif(gif: GifModel) {
