@@ -6,20 +6,20 @@
     <data>
 
         <variable
-            name="gifImage"
-            type="com.veldan.test_gifgallery.network.Images" />
+            name="gif"
+            type="com.veldan.test_gifgallery.domain.Gif" />
 
         <variable
             name="clickListener"
-            type="com.veldan.test_gifgallery.fragments.gif_list.adapter.GifItemListener" />
+            type="com.veldan.test_gifgallery.presentation.fragments.gifList.adapter.GifItemListener" />
     </data>
 
     <ImageView
-        setGif="@{gifImage.fixedWidth.url}"
+        setGif="@{gif.urlFixedWidth}"
         android:layout_width="match_parent"
         android:layout_height="200dp"
         android:layout_margin="10dp"
         android:scaleType="centerCrop"
-        android:onClick="@{() -> clickListener.onClick(gifImage)}"
+        android:onClick="@{() -> clickListener.onClick(gif)}"
         tools:src="@mipmap/ic_launcher" />
 </layout>

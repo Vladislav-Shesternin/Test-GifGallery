@@ -8,7 +8,7 @@
     <!-- {DESTINATION}: gifListFragment -->
     <fragment
         android:id="@+id/gifListFragment"
-        android:name="com.veldan.test_gifgallery.fragments.gif_list.GifListFragment"
+        android:name="com.veldan.test_gifgallery.presentation.fragments.gifList.GifListFragment"
         android:label="GifListFragment"
         tools:layout="@layout/fragment_gif_list">
         <action
@@ -19,7 +19,7 @@
     <!-- {DESTINATION}: gifDetailFragment -->
     <fragment
         android:id="@+id/gifDetailFragment"
-        android:name="com.veldan.test_gifgallery.fragments.gif_detail.GifDetailFragment"
+        android:name="com.veldan.test_gifgallery.presentation.fragments.gifDetail.GifDetailFragment"
         android:label="GifDetailFragment"
         tools:layout="@layout/fragment_gif_detail">
         <argument

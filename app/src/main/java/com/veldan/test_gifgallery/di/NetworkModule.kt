@@ -2,7 +2,7 @@ package com.veldan.test_gifgallery.di
 
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
-import com.veldan.test_gifgallery.network.GIPHY_URL
+import com.veldan.test_gifgallery.framework.network.GIPHY_URL
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
